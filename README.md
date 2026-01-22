@@ -1,4 +1,4 @@
-# SAE 1.04 – Création d'une base de données et Rapport R1.02 – Dev Interface Web
+# Création d'une base de données et Rapport – Dev Interface Web
 
 ## Présentation du projet
 
@@ -113,3 +113,4 @@ ORDER BY QuantiteTotale DESC;
 - [Synthèse de notre rapport](assets/pdf/mission3_bilan.pdf)
 
 ---
+
