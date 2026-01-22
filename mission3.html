@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/ico" href="assets/css/img/favicon.ico">
+  <title>Mission 3</title>
+  <link rel="stylesheet" href="assets/css/mission.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <input type="checkbox" id="menu-toggle" aria-label="menu">
+      <label for="menu-toggle" class="menu-hamburger">☰</label>
+      <a href="index.html" class="logo">DataVision</a>>
+        <ul class="barre_navigation">
+          <li><a href="index.html">Accueil</a></li>
+          <li><a href="mission1.html">Mission 1</a></li>
+          <li><a href="mission2.html">Mission 2</a></li>
+          <li><a href="mission3.html">Mission 3</a></li>
+          <li><a href="conclusion.html">Conclusion</a></li>
+        </ul>
+    </nav>
+  </header>
+  <main>
+    <h1>Mission 3</h1>
+    <section>
+      <h2>Contexte</h2>
+      <p>L’objectif de cette dernière mission était de relever des indicateurs pertinents en lien avec des thèmes
+        spécifiques à partir de la base de
+        données KDou en utilisant des requêtes SQL avancées. Ces indicateurs visent à fournir des insights
+        exploitables pour optimiser les opérations commerciales et la prise de décision stratégique.</p>
+    </section>
+    <section>
+      <h2>Indicateur 1 - Santé et Nutrition - <i>Yasmine</i> </h2>
+      <h3>Mesurer la popularité des différentes boissons et leur évolution dans une optique d'optimisation de l'offre
+        santé et bien-être.</h3>
+      <p><strong>Enoncé : </strong>Identifier les 5 produits de la catégorie 'Boissons' les plus commandés en 2021 et
+        calculer leur
+        évolution en
+        pourcentage par rapport à 2020 pour détecter les tendances de consommation santé.</p>
+      <strong>Objectif de cette requête : </strong>Mesurer la popularité des différentes boissons et leur évolution dans
+      une optique
+      d'optimisation de l'offre santé et bien-être.
+
+      <h3> Construction de la requête SQL :</h3>
+      <p>Sous requête SQL : (afin d’avoir une requête condensée par la suite)</p>
+      <pre>
+    SELECT
+    Produit.RefProd,
+    Produit.NomProd,
+    SUM(DetailCommande.Quantité) AS QteTotale2020
+FROM
+    (
+        (
+            Categorie
+            INNER JOIN Produit ON Categorie.CodeCateg = Produit.CodeCateg
+        )
+        INNER JOIN DetailCommande ON Produit.RefProd = DetailCommande.[Réf produit]
+    )
+    INNER JOIN Commande ON DetailCommande.[N° commande] = Commande.[N° commande]
+WHERE
+    Categorie.NomCateg = "Boissons"
+    AND YEAR(Commande.DateCde) = 2020
+GROUP BY
+    Produit.RefProd,
+    Produit.NomProd;
+
+      </pre>
+      Requête SQL finale :
+      <pre>
+    SELECT
+    TOP 5 P.NomProd,
+    SUM(DC.Quantité) AS QteTotale2021,
+    Nz (Q20.QteTotale2020, 0) AS QteTotale2020,
+    Format(
+        (SUM(DC.Quantité) - Nz (Q20.QteTotale2020, 0)) * 100 / Nz (Q20.QteTotale2020, 1),
+        "0.0"
+    ) & "%" AS EvolutionPourcent
+FROM
+    (
+        (
+            (
+                Categorie
+                INNER JOIN Produit AS P ON Categorie.CodeCateg = P.CodeCateg
+            )
+            INNER JOIN DetailCommande AS DC ON P.RefProd = DC.[Réf produit]
+        )
+        INNER JOIN Commande ON DC.[N° commande] = Commande.[N° commande]
+    )
+    LEFT JOIN Qte_Boissons_2020 AS Q20 ON P.RefProd = Q20.RefProd
+WHERE
+    Categorie.NomCateg = "Boissons"
+    AND YEAR(Commande.DateCde) = 2021
+GROUP BY
+    P.NomProd,
+    P.RefProd,
+    Q20.QteTotale2020
+ORDER BY
+    SUM(DC.Quantité) DESC;
+      </pre>
+
+      <h3> Résultats de la requête SQL :</h3>
+      <table>
+        <caption>Évolution des ventes par produit (2020-2021)</caption>
+        <thead>
+          <tr>
+            <th>Nom Produit</th>
+            <th>QteTotale2021</th>
+            <th>QteTotale2020</th>
+            <th>EvolutionPourcent</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Guaraná Fantástica</td>
+            <td>1 317</td>
+            <td>258</td>
+            <td>+410,5%</td>
+          </tr>
+          <tr>
+            <td>Rhönbräu Klosterbier</td>
+            <td>1 270</td>
+            <td>288</td>
+            <td>+341,0%</td>
+          </tr>
+          <tr>
+            <td>Chang</td>
+            <td>1 233</td>
+            <td>113</td>
+            <td>+991,2%</td>
+          </tr>
+          <tr>
+            <td>Lakkalikööri</td>
+            <td>1 156</td>
+            <td>50</td>
+            <td>+2212,0%</td>
+          </tr>
+          <tr>
+            <td>Chaï</td>
+            <td>1 083</td>
+            <td>128</td>
+            <td>+746,1%</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Interprétation : </h3>
+      <p>Les résultats montrent une croissance très forte sur l'ensemble des boissons en 2021. Le Lakkalikööri se
+        distingue particulièrement avec +2212%, passant de 50 à 1156 unités. Le Chang (+991%) et le Chaï (+746%) suivent
+        cette dynamique, probablement portés par l'intérêt croissant pour les boissons exotiques et santé. <br><br>
+        Le Guaraná et le Rhönbräu maintiennent les plus gros volumes (>1200 unités) tout en affichant des progressions
+        notables (+410% et +341%). Ces chiffres confirment que le segment boissons est en plein essor et mérite d'être
+        renforcé dans l'offre KDou. <br><br>
+        Pour capitaliser sur ces tendances, il serait pertinent d'augmenter les stocks sur ces références, d'élargir la
+        gamme avec des produits similaires (autres bières artisanales, thés bio) et de communiquer davantage sur l'axe
+        bien-être.
+      </p>
+
+      <h2>Indicateur 2 - L'offre de Kdou - <i>Kenza</i> </h2>
+      <h3>Fournisseurs proposant un coût d’achat moyen inférieur à la moyenne du marché</h3>
+      <p> <strong>Enoncé : </strong> Lister, pour chaque pays et chaque société, les fournisseurs dont le coût d’achat
+        moyen des produits proposés est inférieur au coût moyen global des produits de la base. <br>
+        <strong>Objectif de cette requête : </strong> L’objectif est d’identifier les partenaires commerciaux de KDou
+        offrant les tarifs les plus avantageux, afin d’optimiser la marge sur l’offre produit, valoriser les accords
+        avec ces fournisseurs.
+      </p>
+      <h3> Construction de la requête SQL :</h3>
+      <pre>
+    SELECT
+    P.PaysFR,
+    F.Societe,
+    AVG(PR.CoutAchat) AS CoutMoyen
+    FROM
+    (
+        Fournisseur AS F
+        INNER JOIN Pays AS P ON F.NoPays = P.NoPays
+    )
+    INNER JOIN Produit AS PR ON F.NoFour = PR.NoFour
+    GROUP BY
+      P.PaysFR,
+      F.Societe
+    HAVING
+      AVG(PR.CoutAchat) < (
+        SELECT
+            AVG(P2.CoutAchat)
+          FROM
+            Produit AS P2
+    )
+    ORDER BY
+      AVG(PR.CoutAchat);
+      </pre>
+      <h3> Résultats de la requête SQL <i>(extrait)</i> :</h3>
+      <table>
+        <caption>Fournisseurs avec coût d'achat moyen inférieur à la moyenne</caption>
+        <thead>
+          <tr>
+            <th>PaysFR</th>
+            <th>Societe</th>
+            <th>CoutMoyen</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Pays-Bas</td>
+            <td>Holland Zoetgoed BV</td>
+            <td>7,92 €</td>
+          </tr>
+          <tr>
+            <td>Pays-Bas</td>
+            <td>Tulip & Co. Delicacies</td>
+            <td>10,63 €</td>
+          </tr>
+          <tr>
+            <td>France</td>
+            <td>L’escargotière</td>
+            <td>11,04 €</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3>Interprétation : </h3>
+      <p>
+      </p>
+      <h2>Indicateur 3 - Provenance des produits/UE - <i>Tiago</i> </h2>
+      <h3>Répartition du chiffre d’affaires par provenance UE / hors UE</h3>
+      <p><strong> Enoncé : </strong>Comparer la part du chiffre d’affaires générée par les produits achetés auprès de
+        fournisseurs de
+        l’Union Européenne à celle issue de fournisseurs hors UE. <br>
+        <strong>Objectif de cette requête :</strong>
+        L’objectif est de mesurer la dépendance de KDou à
+        l’importation hors Europe et d’identifier les zones géographiques qui contribuent le plus au chiffre
+        d’affaires.
+      </p>
+      <h3> Construction de la requête SQL :</h3>
+      <pre>
+  SELECT
+  Pays.UE AS Provenance,
+    CCur (
+        Sum(
+            (
+                Produit.CoutAchat * Categorie.CoefMarge * DetailCommande.Quantité
+            ) * (1 - [DetailCommande].[Remise (%)] / 100)
+        )
+    ) AS ChiffreAffaires
+  FROM
+    (
+        (
+            (
+                Categorie
+                INNER JOIN Produit ON Categorie.CodeCateg = Produit.CodeCateg
+            )
+            INNER JOIN DetailCommande ON Produit.RefProd = DetailCommande.[Réf produit]
+        )
+        INNER JOIN Fournisseur ON Produit.NoFour = Fournisseur.NoFour
+    )
+    INNER JOIN Pays ON Fournisseur.NoPays = Pays.NoPays
+GROUP BY
+  Pays.UE
+ORDER BY
+  CCur (
+      Sum(
+          Produit.CoutAchat * Categorie.CoefMarge * DetailCommande.Quantité * (1 - [DetailCommande].[Remise (%)] / 100)
+      )
+  ) DESC;
+      </pre>
+      <h3> Résultats de la requête SQL :</h3>
+      <table>
+        <caption>Chiffre d'affaires par provenance des fournisseurs</caption>
+        <thead>
+          <tr>
+            <th>Provenance</th>
+            <th>ChiffreAffaires</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Membre</td>
+            <td>2 947 339,151 €</td>
+          </tr>
+          <tr>
+            <td>Hors</td>
+            <td>2 373 341,7694 €</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h2>Indicateur 4 - Etude clientèle, partenariat - <i>Axel</i> </h2>
+      <h3>Classement des produits selon quantité vendue et bénéfice total</h3>
+      <p> <strong>Enoncé : </strong>Classer les produits du catalogue KDou en fonction de la quantité totale vendue et
+        du bénéfice cumulé généré sur l’ensemble des ventes. <br> 
+        <strong>
+          Objectif de cette requête : </strong> L’objectif de cette requête est d’identifier les produits qui
+        contribuent le plus
+        à la performance financière de l’entreprise, afin d’ajuster au mieux la stratégie commerciale, la gestion des
+        stocks et le ciblage des clients ou partenaires les plus pertinents.
+      </p>
+      <h3> Construction de la requête SQL :</h3>
+      <pre>
+  SELECT
+    Produit.NomProd,
+    Sum(DetailCommande.Quantité) AS QuantiteTotale,
+    CCur (
+        Sum(
+            Categorie.CoefMarge * Produit.CoutAchat * DetailCommande.Quantité * (1 - DetailCommande.[Remise (%)])
+        )
+    ) AS BeneficeTotal
+  FROM
+    Categorie
+    INNER JOIN (
+        Produit
+        INNER JOIN DetailCommande ON Produit.RefProd = DetailCommande.[Réf produit]
+    ) ON Categorie.CodeCateg = Produit.CodeCateg
+  GROUP BY
+    Produit.NomProd
+  ORDER BY
+      3 DESC;
+    </pre>
+      <h3> Résultats de la requête SQL <i>(extrait)</i> :</h3>
+      <table>
+        <caption>Classement des produits par quantité vendue et bénéfice total</caption>
+        <thead>
+          <tr>
+            <th>Nom Produit</th>
+            <th>QuantiteTotale</th>
+            <th>BeneficeTotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Camembert Pierrot</td>
+            <td>1993</td>
+            <td>222 359,6943 €</td>
+          </tr>
+          <tr>
+            <td>Raclette Courdavault</td>
+            <td>1813</td>
+            <td>116 362,6774 €</td>
+          </tr>
+          <tr>
+            <td>Gorgonzola Telino</td>
+            <td>1 698</td>
+            <td>224 265,4605 €</td>
+          </tr>
+          <tr>
+            <td>Guaraná Fantástica</td>
+            <td>1575</td>
+            <td>49 669,1687 €</td>
+          </tr>
+          <tr>
+            <td>Gnocchi di nonna Alice</td>
+            <td>1562</td>
+            <td>70 751,3244 €</td>
+          </tr>
+        </tbody>
+      </table>
+      <h3> Interprétation :</h3>
+      <p>L’analyse révèle que certains produits, comme Côte de Blaye ou Manjimup Dried Apples, génèrent à la fois un
+        volume de ventes élevé et un bénéfice total particulièrement important. Ce constat est essentiel pour le
+        pilotage de la stratégie commerciale. <br><br>
+        Cet indicateur renforce l’importance de bien connaître la structure de la clientèle et des réseaux de
+        partenariat. Il permet d’identifier les liens entre produits porteurs et typologie de clients associés, et de
+        transformer cette connaissance en leviers pour consolider et développer l’activité commerciale de KDou.
+      </p>
+
+    </section>
+    <section>
+      <h2>Rapport complet <i>(réunissant la synthèse finale)</i></h2>
+      <p>Pour consulter le rapport complet de la mission 3, veuillez cliquer sur le lien ci-dessous :</p>
+      <a href="assets/pdf/mission3_bilan.pdf" class="lienbtn" target="_blank" download>
+        Télécharger le rapport Mission 3 (PDF)
+      </a>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 DataVision. Tous droits réservés.</p>
+  </footer>
+
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/ico" href="assets/img/favicon.ico">
+  <title>Conclusion</title>
+  <link rel="stylesheet" href="assets/css/mission.css">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+  </style>
+</head>
+
+<body>
+  <header>
+    <nav>
+      <input type="checkbox" id="menu-toggle" aria-label="menu">
+      <label for="menu-toggle" class="menu-hamburger">☰</label>
+      <a href="index.html" class="logo">DataVision</a>
+      <ul class="barre_navigation">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="mission1.html">Mission 1</a></li>
+        <li><a href="mission2.html">Mission 2</a></li>
+        <li><a href="mission3.html">Mission 3</a></li>
+        <li><a href="conclusion.html">Conclusion</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <h1>Conclusion</h1>
+    <section>
+      <h2>Bilan sur l'analyse des données de Kdou</h2>
+      <p class="lead">L’audit approfondi de la base KDou met en avant un système d’information bien structuré, mais nécessitant certains ajustements pour un usage décisionnel optimal.</p>
+
+      <section class="bilan" aria-label="Bilan de l'analyse">
+        <article class="bilan-card" aria-labelledby="bilan-points">
+          <h3 id="bilan-points">Points forts</h3>
+          <ul>
+            <li>Modèle relationnel solide : relations entre tables cohérentes, normalisation respectée.</li>
+            <li>Efficacité des réseaux clients : le modèle pilote‑partenaire est pertinent (ex : équilibre des commandes NOSGK/ISAEP).</li>
+            <li>Diversification maîtrisée : la part importante du CA avec des fournisseurs hors UE confirme l’ouverture à l’international.</li>
+          </ul>
+        </article>
+
+        <article class="bilan-card" aria-labelledby="bilan-axes">
+          <h3 id="bilan-axes">Axes d’amélioration</h3>
+          <ul>
+            <li>Fiabilité des données à renforcer (anomalies sur codes postaux, pays, emails).</li>
+            <li>Catalogue produit à optimiser (produits dormants à revoir).</li>
+            <li>Gouvernance à formaliser (contrôles qualité et monitoring plus rigoureux attendus).</li>
+          </ul>
+        </article>
+
+        <article class="bilan-card" aria-labelledby="bilan-recos">
+          <h3 id="bilan-recos">Recommandations</h3>
+          <ul>
+            <li>Mettre en place des règles de validation des données à l’entrée.</li>
+            <li>Effectuer un nettoyage régulier pour éliminer les doublons et corriger les erreurs.</li>
+            <li>Suivi des fournisseurs inactifs.</li>
+          </ul>
+        </article>
+      </section>
+    </section>
+    <section>
+      <h2>Conclusion sur les outils utilisés</h2>
+      <p>Les trois missions ont mobilisé une palette d'outils complémentaires, chacun répondant à des besoins
+        spécifiques dans la chaîne d'exploitation des données. </p>
+      <table>
+        <caption>Comparaison des outils de manipulation de données</caption>
+        <thead>
+          <tr>
+            <th>Outil</th>
+            <th>Atouts</th>
+            <th>Limites</th>
+            <th>Usage optimal</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Microsoft Excel</th>
+            <td>
+              Interface familière et accessible<br>
+              Fonctionnalités de filtrage, tri et formatage intuitives<br>
+              Exploration rapide et détection visuelle d'anomalies<br>
+              Export facile vers d'autres formats
+            </td>
+            <td>
+              Risques de modifications accidentelles<br>
+              Pas de gestion native des relations entre tables
+            </td>
+            <td>
+              Audit préliminaire<br>
+              Nettoyage ponctuel<br>
+              Visualisation rapide
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">Microsoft Access (QBE)</th>
+            <td>
+              Interface graphique de requêtes sans code<br>
+              Visualisation immédiate des résultats<br>
+              Analyse de performance intégrée<br>
+              Gestion native des relations entre tables<br>
+              Adapté aux non-techniques
+            </td>
+            <td>
+              Limité pour requêtes très complexes graphiquement
+            </td>
+            <td>
+              Requêtes métier quotidiennes<br>
+              Prototypage rapide<br>
+              Formation des utilisateurs
+            </td>
+          </tr>
+          <tr>
+            <th scope="row">SQL</th>
+            <td>
+              Puissance et flexibilité maximales<br>
+              Standard universel (multi-SGBD)<br>
+              Optimisation fine des performances
+            </td>
+            <td>
+              Nécessite compréhension du modèle de données<br>
+              Pas de visualisation graphique native
+            </td>
+            <td>
+              Analyses avancées<br>
+              Calculs d'indicateurs complexes<br>
+              Rapports automatisés
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+    </section>
+    <section>
+      <h2>Rapport final</h2>
+      <p>Pour consulter la synthèse finale des 3 missions, veuillez cliquer sur le lien ci-dessous :</p>
+      <a href="assets/pdf/mission3_bilan.pdf" class="lienbtn" target="_blank" download>
+        Télécharger la synthèse finale (PDF)
+      </a>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 DataVision. Tous droits réservés.</p>
+  </footer>
+</body>
+
+</html>
